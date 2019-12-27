@@ -1,5 +1,5 @@
 import React from 'react';
-import 'anychart';
+import anychart from '../library/anychart-custom-build.min.js';
 
 /**
  * AnyChart React plugin.
@@ -30,7 +30,15 @@ class AnyChart extends React.Component {
      * E.g. <AnyChart yAxis={[1, {orientation: 'right'}]} />
      * @type {Array.<string>}
      */
-    this.multipleEntities = ['xAxis', 'yAxis', 'lineMarker', 'rangeMarker', 'textMarker', 'grid', 'minorGrid'];
+    this.multipleEntities = [
+      'xAxis',
+      'yAxis',
+      'lineMarker',
+      'rangeMarker',
+      'textMarker',
+      'grid',
+      'minorGrid'
+    ];
 
     /**
      * Container for chart/stage.
@@ -44,13 +52,14 @@ class AnyChart extends React.Component {
    */
   removeInstance() {
     if (this.instance) {
-      if (this.disposeInstance)
-        this.instance.dispose();
+      if (this.disposeInstance) this.instance.dispose();
       else {
-        if (this.isStage)
-          this.instance.remove();
+        if (this.isStage) this.instance.remove();
         else
-          this.instance.container().getStage().remove();
+          this.instance
+            .container()
+            .getStage()
+            .remove();
       }
     }
   }
@@ -61,7 +70,7 @@ class AnyChart extends React.Component {
    * @return {boolean}
    */
   isArray(value) {
-    return ((typeof value == 'object') && (value instanceof Array))
+    return typeof value == 'object' && value instanceof Array;
   }
 
   /**
@@ -72,15 +81,16 @@ class AnyChart extends React.Component {
     for (let key of Object.keys(props)) {
       let value = props[key];
       if ((key == 'width' || key == 'height') && !this.isStage)
-        this.instance.container().getStage()[key](value);
+        this.instance
+          .container()
+          .getStage()
+          [key](value);
 
       if (this.instance[key]) {
         if (~this.multipleEntities.indexOf(key)) {
-          if (!this.isArray(value))
-            value = [value];
-          this.instance[key](...value)
-        } else
-          this.instance[key](value)
+          if (!this.isArray(value)) value = [value];
+          this.instance[key](...value);
+        } else this.instance[key](value);
       }
     }
   }
@@ -93,7 +103,7 @@ class AnyChart extends React.Component {
     if (props.instance) {
       this.removeInstance();
       this.instance = props.instance;
-      this.isStage = ((typeof this.instance.draw) !== 'function');
+      this.isStage = typeof this.instance.draw !== 'function';
       delete props.instance;
       this.disposeInstance = false;
     } else if (props.type) {
@@ -104,8 +114,7 @@ class AnyChart extends React.Component {
       delete props.type;
       delete props.data;
     }
-    if (this.instance)
-      this.instance.container(this.containerId);
+    if (this.instance) this.instance.container(this.containerId);
     delete props.id;
   }
 
@@ -144,9 +153,7 @@ class AnyChart extends React.Component {
    * Render container for future chart drawing.
    */
   render() {
-    return (
-      <div id={this.containerId}></div>
-    )
+    return <div id={this.containerId}></div>;
   }
 
   /**
@@ -169,7 +176,7 @@ class AnyChart extends React.Component {
     var props = Object.assign({}, prevProps);
     delete props.type;
     delete props.instance;
-    this.createAndDraw(props)
+    this.createAndDraw(props);
   }
 
   /**
@@ -183,4 +190,4 @@ class AnyChart extends React.Component {
 /**
  * Default export.
  */
-export default AnyChart
+export default AnyChart;

@@ -12,7 +12,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-require('anychart');
+var _anychartCustomBuildMin = require('../library/anychart-custom-build.min.js');
+
+var _anychartCustomBuildMin2 = _interopRequireDefault(_anychartCustomBuildMin);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -156,7 +158,7 @@ var AnyChart = function (_React$Component) {
       } else if (props.type) {
         this.removeInstance();
         this.disposeInstance = true;
-        this.instance = anychart[props.type](props.data);
+        this.instance = _anychartCustomBuildMin2.default[props.type](props.data);
         this.isStage = false;
         delete props.type;
         delete props.data;
